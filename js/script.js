@@ -25,11 +25,28 @@ design.addEventListener ('change', (e) => {
         const currentOption = color.children[i];
         const currentDataTheme = currentOption.getAttribute('data-theme');
            if (eventValue === currentDataTheme) {
-            currentOption.hidden = false;
-            currentOption.setAttribute('selected', 'selected');
+            currentOption.hidden = false; //hides from the list
+            currentOption.setAttribute('selected', 'selected'); //the one which is shown by default in the list
           } else {
             currentOption.hidden = true;
             currentOption.removeAttribute('selected');
             }
     }
 })
+
+//register for activities, put in function later
+const activities = document.querySelector('#activities');
+const activitiesTotal = document.querySelector('#activities-cost');
+let totalCost = 0;
+
+activities.addEventListener ('change', (e) => {
+let eventCost = +e.target.getAttribute('data-cost'); // turns it into a number
+ if (e.target.checked) {
+    totalCost += eventCost;
+ } else {
+    totalCost -= eventCost;
+ }
+ activitiesTotal.innerHTML = `<p id="activities-cost" class="activities-cost">Total: $${totalCost}</p>`
+})
+
+
