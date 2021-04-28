@@ -84,59 +84,88 @@ const cardNumber = document.querySelector('#cc-num');
 const zip = document.querySelector('#zip');
 const cvv = document.querySelector('#cvv');
 
+function notValid (parent) { //1. is invoked when not valid and changes styles
+    parent.classList.add('not-valid');
+    parent.classList.remove('valid');
+    parent.lastElementChild.style.display = "block";
+}
+function isValid (parent) { //2. is invoked when valid and changes styles
+    parent.classList.add('valid');
+    parent.classList.remove('not-valid');
+    parent.lastElementChild.style.display = "none";
+}
+
 function nameValidation() {
-    const nRegex = /^.*(?!\s*$)/ //just name "regex" later in fuction as function scope
-    const nameValid = nRegex.test(nameField.value); //matches any character zero or more times, then groups a negative lookahead for 0 or more whitespace that must be in the end, alas alone.
+    const regex = /^.*(?!\s*$)/
+    const nameValid = regex.test(nameField.value); //matches any character zero or more times, then groups a negative lookahead for 0 or more whitespace that must be in the end, alas alone.
+    const parent = nameField.parentElement; //parent element
     if (nameValid === false) {
-        console.log('One or more characters are needed.');
+        notValid(parent);
         return false;
+    } else {
+        isValid(parent);
     }
 }
 
 function emailValidation() {
-    const eRegex = /^[A-Za-z0-9\.]+@[A-Za-z0-9\.]+\.com$/
-    const emailValid = eRegex.test(email.value);
+    const regex = /^[A-Za-z0-9\.]+@[A-Za-z0-9\.]+\.com$/
+    const emailValid = regex.test(email.value);
+    const parent = email.parentElement; //parent element
     if (emailValid === false) {
-        console.log('The email address must be validly formatted.');
+        notValid(parent);
         return false;
+    } else {
+        isValid(parent);
     }
 }
 
 function activitiesValidation() {
     if (totalCost == 0) {
-        console.log('Select at least one activity.');
+        notValid(activities);
         return false;
+    } else {
+        isValid(activities);
     }
 }
 
 function cardNumberValidation() {
-    const cardNumberRegex = /^\d{13,16}$/
-    const cardNumberValid = cardNumberRegex.test(cardNumber.value);
+    const regex = /^\d{13,16}$/
+    const cardNumberValid = regex.test(cardNumber.value);
+    const parent = cardNumber.parentElement; //parent element
     if (cardNumberValid === false) {
-        console.log('Please provide a valid credit card number.')
+        notValid(parent);
         return false;
+    } else {
+        isValid(parent);
     }
 }
 
 function zipValidation() {
-    const zipRegex = /^\d{5}$/
-    const zipValid = zipRegex.test(zip.value);
+    const regex = /^\d{5}$/
+    const zipValid = regex.test(zip.value);
+    const parent = zip.parentElement; //parent element
     if (zipValid === false) {
-        console.log('Please provide a valid zip code.')
+        notValid(parent);
         return false;
+    } else {
+        isValid(parent);
     }
 }
 
 function cvvValidation() {
-    const cvvRegex = /^\d{3}$/
-    const cvvValid = cvvRegex.test(cvv.value);
+    const regex = /^\d{3}$/
+    const cvvValid = regex.test(cvv.value);
+    const parent = cvv.parentElement; //parent element
+
     if (cvvValid === false) {
-        console.log('Please provide a valid cvv number.')
+        notValid(parent);
         return false;
+    } else {
+        isValid(parent);
     }
 }
 
-
+//the event listener which starts it all.
 form.addEventListener('submit', (e) => {
     if (nameValidation() === false) {
         e.preventDefault();
@@ -161,6 +190,16 @@ form.addEventListener('submit', (e) => {
 }
 )
 
+//accessibility - add/remove focus for the activities section when tabbing through.
+const checkboxes = document.querySelectorAll("input[type='checkbox']");
+for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].addEventListener ('focus', (e) => {
+        checkboxes[i].parentNode.classList.add("focus");
+    })
+    checkboxes[i].addEventListener ('blur', (e) => {
+        checkboxes[i].parentNode.classList.remove("focus");
+    })
+}
 
 
 
