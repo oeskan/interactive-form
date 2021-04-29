@@ -1,2 +1,2 @@
-# techdegree-project-3
- 
+# Treehouse FSJS Techdegree: project 3 - Interactive Form
+ This page contains a registration form for a hypothetical Full Stack developer conference. The user registers basic information, then choose between options for a t-shirt, registers for activities and finally provides payment information. User input is validated when the user submits the form and if necessary, helpful error messages are displayed.
