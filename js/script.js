@@ -6,7 +6,7 @@ nameField.focus();
 
 /**
  * Job role. A field is displayed where the user can enter other
- * relevant job role only if "Other" job role is selected.
+ * relevant job role only if "other" job role is selected.
  */
 const jobRole = document.querySelector('#title');
 const otherRole = document.querySelector('#other-job-role');
@@ -21,8 +21,8 @@ jobRole.addEventListener('change', (e) => {
 
 /**
  * T-shirt info. Initially hides color options. Listens for a
- * change event when a design is chosen. Loops and displays
- * only matching theme-specific colors.
+ * change event when a design is chosen. Loops, selects and 
+ * displays only matching theme-specific colors.
  */
 const design = document.querySelector('#design');
 const color = document.querySelector('#color')
@@ -44,8 +44,9 @@ design.addEventListener('change', (e) => {
 })
 
 /**
- * Activities. Listens for change event when an activity checkbox
- * is checked and adds the cost of the event to the total cost.
+ * Activities. Listens for change event when an activity checkbox is either checked or 
+ * unchecked and adds or removes the cost of that event to/from the total cost. Using
+ * a loop the user is prevented from selecting simultaneously occuring activites.
  */
 const activities = document.querySelector('#activities');
 const activitiesTotal = document.querySelector('#activities-cost');
@@ -59,25 +60,38 @@ activities.addEventListener('change', (e) => {
         totalCost -= eventCost;
     }
     activitiesTotal.innerHTML = `<p id="activities-cost" class="activities-cost">Total: $${totalCost}</p>`
+
+    for (let i = 0; i < checkboxes.length; i++) {
+        const activity = checkboxes[i].getAttribute('data-day-and-time');
+        const dateAndTime = e.target.getAttribute('data-day-and-time');
+        if (dateAndTime === activity && e.target !== checkboxes[i]) {
+            if (e.target.checked) {
+                checkboxes[i].disabled = true;
+            } else {
+                checkboxes[i].disabled = false;
+
+            }
+        }
+    }
 })
 
 /**
- * Two event listeners that either adds and removes focus state for
+ * Two event listeners that either adds or removes focus state for
  * the activities section when navigating it using tab. For accessibility.
  */
 const checkboxes = document.querySelectorAll("input[type='checkbox']");
 for (let i = 0; i < checkboxes.length; i++) {
     checkboxes[i].addEventListener('focus', (e) => {
-        checkboxes[i].parentNode.classList.add("focus");
+        checkboxes[i].parentNode.classList.add('focus');
     })
     checkboxes[i].addEventListener('blur', (e) => {
-        checkboxes[i].parentNode.classList.remove("focus");
+        checkboxes[i].parentNode.classList.remove('focus');
     })
 }
 
 /**
- * Payment info. Displays credit card by default. Listens to change event
- * to either display or hide credit card, paypal or bitcoin option.
+ * Payment info. Displays and selects credit card by default. Listens to a change
+ * event to either display or hide the credit card, paypal or bitcoin options.
  */
 const paymentOptions = document.querySelector('#payment');
 const creditCard = document.querySelector('#credit-card');
@@ -121,7 +135,7 @@ const cvv = document.querySelector('#cvv');
 function notValid(parent) {
     parent.classList.add('not-valid');
     parent.classList.remove('valid');
-    parent.lastElementChild.style.display = "block";
+    parent.lastElementChild.style.display = 'block';
 }
 
 /**
@@ -131,7 +145,7 @@ function notValid(parent) {
 function isValid(parent) {
     parent.classList.add('valid');
     parent.classList.remove('not-valid');
-    parent.lastElementChild.style.display = "none";
+    parent.lastElementChild.style.display = 'none';
 }
 
 /**
@@ -227,6 +241,16 @@ function cvvValidation() {
         isValid(parent);
     }
 }
+
+/**
+ * Real-time validation
+ */
+ nameField.addEventListener('keyup', nameValidation);
+ email.addEventListener('keyup', emailValidation);
+ activities.addEventListener('keyup', activitiesValidation);
+ cardNumber.addEventListener('keyup', cardNumberValidation);
+ zip.addEventListener('keyup', zipValidation);
+ cvv.addEventListener('keyup', cvvValidation);
 
 /**
  * Event listener that prevents form from submitting if any
